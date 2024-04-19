@@ -1,14 +1,30 @@
-function App() {
+import { useState } from "react";
+import { useEffect } from "react";
 
-  return (
-    <>
-      <h1>Vite + React</h1>
-      <p>A list of frameworks</p>
-      <ul>
-        <li>data comes from backend</li>
-      </ul>
-    </>
-  )
+const backendUrl = "http://localhost:4588";
+
+function App() {
+	const [frameworks, setFrameworks] = useState([]);
+
+	useEffect(() => {
+		(async () => {
+			const response = await fetch(`${backendUrl}/frameworks`);
+			const _frameworks = await response.json();
+			setFrameworks(_frameworks);
+		})();
+	}, []);
+
+	return (
+		<>
+			<h1>Full Stack Site</h1>
+			<p>Here are {frameworks.length} frameworks:</p>
+			<ul>
+				{frameworks.map((framework, index) => {
+					return <li key={index}><a href={framework.url}>{framework.title}</a></li>;
+				})}
+			</ul>
+		</>
+	);
 }
 
-export default App
+export default App;
